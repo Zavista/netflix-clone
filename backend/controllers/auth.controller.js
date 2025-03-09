@@ -1,6 +1,6 @@
 import { User } from "../models/user.model.js";
 import bcrypt, { hash } from "bcryptjs";
-import { generateToken } from "../utils/generateToken.js";
+import { generateTokenAndSetCookie } from "../utils/generateTokenAndSetCookie.js";
 
 export const signup = async (req, res) => {
   try {
@@ -56,7 +56,7 @@ export const signup = async (req, res) => {
     newUser.image = PROFILE_PICS[random];
 
     if (newUser) {
-      generateToken(newUser._id, res);
+      generateTokenAndSetCookie(newUser._id, res);
 
       await newUser.save();
 
@@ -104,7 +104,7 @@ export const login = async (req, res) => {
         .json({ message: "Invalid credentials", success: false });
     }
 
-    generateToken(user._id, res);
+    generateTokenAndSetCookie(user._id, res);
     const userResponse = user.toObject();
     userResponse.password = "";
 
